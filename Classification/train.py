@@ -18,7 +18,6 @@ def train(model, num_epochs, optimizer, loader, val_loader, save = True, cuda = 
     results = []
     accuracy = []
     num = [i for i in range(num_epochs)]
-    f = open("classification.log", "w")
     for epoch in range(num_epochs):
         train_loss = 0.0
         print("Epoch {}/{}".format(epoch, num_epochs - 1))
@@ -36,7 +35,6 @@ def train(model, num_epochs, optimizer, loader, val_loader, save = True, cuda = 
             output.backward()
             optimizer.step()
         print("loss: {}".format(train_loss))
-        print("{} {}".format(epoch, train_loss), file = f)
         results.append(train_loss)
         accuracy.append(test(model, val_loader, cuda))
         if save:

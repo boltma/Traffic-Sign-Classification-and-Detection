@@ -43,7 +43,7 @@ def main():
     optimizer = optim.Adam(test_model.parameters(), lr = 0.001)
     print(use_gpu)
     result = train(test_model, args.epoch, optimizer, train_loader, val_loader, save, use_gpu)
-    test(result, val_loader)
+    test(result, val_loader, cuda=use_gpu)
     
 if __name__ == "__main__":
     main()
