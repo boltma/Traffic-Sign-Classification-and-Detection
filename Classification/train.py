@@ -10,8 +10,11 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-def train(model, num_epochs, optimizer, loader, save = True):
-    loss = nn.CrossEntropyLoss().cuda()
+def train(model, num_epochs, optimizer, loader, save = True, cuda = False):
+    if cuda:
+        loss = nn.CrossEntropyLoss().cuda()
+    else:
+        loss = nn.CrossEntropyLoss()
     result = []
     num = [i for i in range(num_epochs)]
     for epoch in range(num_epochs):
@@ -20,8 +23,9 @@ def train(model, num_epochs, optimizer, loader, save = True):
         for data in loader:
             model.train(True)
             image, label = data['image'], data['label']
-            image = Variable(image.cuda())
-            label = Variable(label.cuda())
+            if cuda:
+                image = Variable(image.cuda())
+                label = Variable(label.cuda())
 
             optimizer.zero_grad()
 
