@@ -17,6 +17,7 @@ def train(model, num_epochs, optimizer, loader, save = True, cuda = False):
         loss = nn.CrossEntropyLoss()
     result = []
     num = [i for i in range(num_epochs)]
+    f = open("classification.log", "w")
     for epoch in range(num_epochs):
         train_loss = 0.0
         print("Epoch {}/{}".format(epoch, num_epochs - 1))
@@ -34,6 +35,7 @@ def train(model, num_epochs, optimizer, loader, save = True, cuda = False):
             output.backward()
             optimizer.step()
         print("loss: {}".format(train_loss))
+        print("{} {}".format(epoch, train_loss), file = f)
         result.append(train_loss)
         if save:
             torch.save(model.state_dict(), 'params18.pkl')
