@@ -6,10 +6,14 @@ import time
 from torch.autograd import Variable
 import torchvision
 import torch
+import matplotlib.pyplot as plt
+import pandas as pd
+
 
 def train(model, num_epochs, optimizer, loader, save = True):
     loss = nn.CrossEntropyLoss().cuda()
-
+    result = []
+    num = [i for i in range(num_epochs)]
     for epoch in range(num_epochs):
         train_loss = 0.0
         print("Epoch {}/{}".format(epoch, num_epochs - 1))
@@ -26,9 +30,12 @@ def train(model, num_epochs, optimizer, loader, save = True):
             output.backward()
             optimizer.step()
         print("loss: {}".format(train_loss))
+        result.append(train_loss)
         if save:
-            torch.save(model.state_dict(), 'params.pkl')
-        
+            torch.save(model.state_dict(), 'params18.pkl')
+    dataframe = pd.DataFrame({'epoch': num, 'result': result})
+    dataframe.to_csv("result.csv")
+
     return model
 
 
