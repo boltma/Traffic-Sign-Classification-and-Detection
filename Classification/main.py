@@ -8,7 +8,7 @@ from test import test
 import argparse
 def parse_args():
     parser = argparse.ArgumentParser(description='Classification')
-    parser.add_argument('--cuda', default=False)
+    parser.add_argument('--cuda', default=True)
     parser.add_argument('--epoch', type=int, default=100)
     parser.add_argument('--model', default='ResNet18')
     return parser.parse_args()
@@ -42,7 +42,7 @@ def main():
     #test_model.load_state_dict(torch.load('paramsdnn.pkl'))
     optimizer = optim.Adam(test_model.parameters(), lr = 0.001)
     print(use_gpu)
-    result = train(test_model, args.epoch, optimizer, train_loader, save, use_gpu)
+    result = train(test_model, args.epoch, optimizer, train_loader, val_loader, save, use_gpu)
     test(result, val_loader)
     
 if __name__ == "__main__":
