@@ -14,6 +14,9 @@ def parse_args():
     return parser.parse_args()
 def main():
     args = parse_args()
+    save = True
+    use_gpu = args.cuda == str(True)
+
     train_tfs = transforms.Compose([
         transforms.Resize(48),
         transforms.RandomSizedCrop(48),
@@ -34,11 +37,12 @@ def main():
         test_model = model.ResNet18()
     if args.model == 'ResNet50':
         test_model = model.ResNet50()
-    if args.cuda:
+    if use_gpu:
         test_model = test_model.cuda()
     #test_model.load_state_dict(torch.load('paramsdnn.pkl'))
     optimizer = optim.Adam(test_model.parameters(), lr = 0.001)
-    result = train(test_model, args.epoch, optimizer, train_loader, args.cuda)
+    print(use_gpu)
+    result = train(test_model, args.epoch, optimizer, train_loader, save, use_gpu)
     test(result, val_loader)
     
 if __name__ == "__main__":
