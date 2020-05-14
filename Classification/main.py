@@ -8,7 +8,7 @@ from test import test
 import argparse
 def parse_args():
     parser = argparse.ArgumentParser(description='Classification')
-    parser.add_argument('--cuda', default=True)
+    parser.add_argument('--cuda', default='True')
     parser.add_argument('--epoch', type=int, default=100)
     parser.add_argument('--model', default='ResNet18')
     return parser.parse_args()
@@ -16,7 +16,7 @@ def main():
     args = parse_args()
     save = True
     use_gpu = args.cuda == str(True)
-
+    
     train_tfs = transforms.Compose([
         transforms.Resize(48),
         transforms.RandomSizedCrop(48),
