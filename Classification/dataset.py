@@ -31,20 +31,20 @@ class my_dataset(torch.utils.data.Dataset):
         self.mode = mode
         self.transforms = transforms
         if self.mode == "train":
-            self.classes = os.listdir(os.path.join("data/Classification/Data/Train"))
+            self.classes = os.listdir(os.path.join("../data/Classification/Data/Train"))
             for img_classes in self.classes:
-                img_dir = os.listdir(os.path.join("data/Classification/Data/Train", img_classes))
+                img_dir = os.listdir(os.path.join("../data/Classification/Data/Train", img_classes))
                 self.imgs += list(map(lambda x: img_classes + "/" + x, img_dir))
                 c = [img_classes] * len(img_dir)
                 self.img_class += c
         elif self.mode == "test":
-            self.imgs += os.listdir(os.path.join("data/Classification/Data/Test"))
+            self.imgs += os.listdir(os.path.join("../data/Classification/Data/Test"))
         
     def __getitem__(self, idx):
         if self.mode == "train":
-            img_path = os.path.join("data/Classification/Data/Train/", self.imgs[idx])
+            img_path = os.path.join("../data/Classification/Data/Train/", self.imgs[idx])
         elif self.mode == "test":
-            img_path = os.path.join("data/Classification/Data/Test/", self.imgs[idx])
+            img_path = os.path.join("../data/Classification/Data/Test/", self.imgs[idx])
         img = Image.open(img_path).convert('RGB')
         if self.transforms is not None:
             img = self.transforms(img)
