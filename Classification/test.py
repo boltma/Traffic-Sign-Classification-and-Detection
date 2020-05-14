@@ -7,14 +7,20 @@ from torch.autograd import Variable
 import torchvision
 import os
 
-def test(model, loader):
+def test(model, loader, cuda = False):
     model.eval()
-    correct = torch.zeros(1).squeeze().cuda()
-    total = torch.zeros(1).squeeze().cuda()
+    if cuda:
+        correct = torch.zeros(1).squeeze().cuda()
+        total = torch.zeros(1).squeeze().cuda()
+    else:
+        correct = torch.zeros(1).squeeze()
+        total = torch.zeros(1).squeeze()
+
     for i, data in enumerate(loader):
         image, label = data['image'], data['label']
-        image = Variable(image.cuda())
-        label = Variable(label.cuda())
+        if cuda:
+            image = Variable(image.cuda())
+            label = Variable(label.cuda())
 
         output = model(image)
 
@@ -22,3 +28,4 @@ def test(model, loader):
         correct += (pred == label).sum().float()
         total += len(label)
     print("accuracy: {}".format(correct / total))
+    return correct / total

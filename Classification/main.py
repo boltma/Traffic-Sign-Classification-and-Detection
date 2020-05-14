@@ -5,8 +5,18 @@ import torch.optim as optim
 from train import train
 from torchvision import transforms
 from test import test
-
+import argparse
+def parse_args():
+    parser = argparse.ArgumentParser(description='Classification')
+    parser.add_argument('--cuda', default=True)
+    parser.add_argument('--epoch', type=int, default=100)
+    parser.add_argument('--model', default='ResNet18')
+    return parser.parse_args()
 def main():
+    args = parse_args()
+    save = True
+    use_gpu = args.cuda == str(True)
+
     train_tfs = transforms.Compose([
         transforms.Resize(48),
         transforms.RandomSizedCrop(48),
@@ -23,12 +33,17 @@ def main():
     print('train: ', len(train_ds))
     print('validation:', len(val_ds))
     print(type(ds), type(train_ds))
-    test_model = model.ResNet18()
-    test_model = test_model.cuda()
+    if args.model == 'ResNet18':
+        test_model = model.ResNet18()
+    if args.model == 'ResNet50':
+        test_model = model.ResNet50()
+    if use_gpu:
+        test_model = test_model.cuda()
     #test_model.load_state_dict(torch.load('paramsdnn.pkl'))
     optimizer = optim.Adam(test_model.parameters(), lr = 0.001)
-    result = train(test_model, 100, optimizer, train_loader)
-    test(result, val_loader)
+    print(use_gpu)
+    result = train(test_model, args.epoch, optimizer, train_loader, val_loader, save, use_gpu)
+    test(result, val_loader, cuda=use_gpu)
     
 if __name__ == "__main__":
     main()
