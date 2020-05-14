@@ -6,15 +6,20 @@ from PIL import Image
 def read_image(task):
     data = []
     label = []
-    with open('data/Classification/DataFewShot/' + task + '.json', 'r') as fp:
+    with open('data/Classification/Data/train.json', 'r') as fp:
         js = json.load(fp)
+    v0 = 0
     for f, v in js.items():
+        if v == 'po' or v == 'io':
+            continue
         if task == "train":
-            image = Image.open('data/Classification/DataFewShot/T' + task[1:] +
-                               '/' + v + '/' + f)
+            if v != v0:
+                image = Image.open('data/Classification/Data/Train/' + v + '/' + f)
+                v0 = v
+            else:
+                continue
         else:
-            image = Image.open('data/Classification/DataFewShot/T' + task[1:] +
-                               '/' + f)
+            image = Image.open('data/Classification/Data/Train/' + v + '/' + f)
         imafter = image.resize((64, 64))
         imafter = imafter.convert("L")
         data.append(np.array(imafter))
