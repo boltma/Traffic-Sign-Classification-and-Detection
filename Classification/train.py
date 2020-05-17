@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from test import test
 
-def train(model, num_epochs, optimizer, loader, val_loader, save = True, cuda = False):
+def train(model, num_epochs, optimizer, loader, val_loader, modelname, save = True, cuda = False):
     if cuda:
         loss = nn.CrossEntropyLoss().cuda()
     else:
@@ -18,6 +18,7 @@ def train(model, num_epochs, optimizer, loader, val_loader, save = True, cuda = 
     results = []
     accuracy = []
     num = [i for i in range(num_epochs)]
+    f = open("classification.log", "w")
     for epoch in range(num_epochs):
         train_loss = 0.0
         print("Epoch {}/{}".format(epoch, num_epochs - 1))
@@ -35,10 +36,11 @@ def train(model, num_epochs, optimizer, loader, val_loader, save = True, cuda = 
             output.backward()
             optimizer.step()
         print("loss: {}".format(train_loss))
+        print("{} {}".format(epoch, train_loss), file = f)
         results.append(train_loss)
         accuracy.append(test(model, val_loader, cuda))
         if save:
-            torch.save(model.state_dict(), 'params18.pkl')
+            torch.save(model.state_dict(), 'params'+modelname+'.pkl')
     dataframe = pd.DataFrame({'epoch': num, 'result': results})
     dataframe.to_csv("result.csv")
     dataframe = pd.DataFrame({'epoch': num, 'accuracy': accuracy})
