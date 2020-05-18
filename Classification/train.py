@@ -18,6 +18,7 @@ def train(model, num_epochs, optimizer, loader, val_loader, modelname, save = Tr
     results = []
     accuracy = []
     num = [i for i in range(num_epochs)]
+    best_acc = 0.0
     f = open("classification.log", "w")
     for epoch in range(num_epochs):
         train_loss = 0.0
@@ -38,9 +39,13 @@ def train(model, num_epochs, optimizer, loader, val_loader, modelname, save = Tr
         print("loss: {}".format(train_loss))
         print("{} {}".format(epoch, train_loss), file = f)
         results.append(train_loss)
-        accuracy.append(test(model, val_loader, cuda))
-        if save:
+        acc = test(model, val_loader, cuda)
+        accuracy.append(acc.item())
+        #print(acc.item())
+        if best_acc < acc:
             torch.save(model.state_dict(), 'params'+modelname+'.pkl')
+        best_acc = max(best_acc, acc)
+        print('best accuracy is: {}'.format(best_acc))
     dataframe = pd.DataFrame({'epoch': num, 'result': results})
     dataframe.to_csv("result.csv")
     dataframe = pd.DataFrame({'epoch': num, 'accuracy': accuracy})
