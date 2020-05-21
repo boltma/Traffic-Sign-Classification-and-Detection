@@ -28,7 +28,7 @@ def read_data(data_dir):
     return datas, labels
 
 
-data = np.load('hog.npz')
+data = np.load('../hog.npz')
 datas = data['datas']
 labels = data['labels']
 # datas, labels = read_data('data/Classification/Data/Train')
@@ -42,6 +42,6 @@ X_train, X_test, y_train, y_test = train_test_split(datas, labels, test_size=0.2
 classifier.fit(X_train, y_train)
 print('The parameters of the best model are: ')
 print(classifier.best_params_)
-joblib.dump(classifier, 'svm.m')
+joblib.dump(classifier, '../svm.m')
 predicted = classifier.predict(X_test)
 print("Classification report for classifier %s:\n%s\n" % (classifier, metrics.classification_report(y_test, predicted)))
