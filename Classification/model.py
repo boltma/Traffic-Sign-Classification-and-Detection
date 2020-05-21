@@ -25,6 +25,22 @@ class ResNet50(Model):
         num_ftrs = self.model.fc.in_features
         self.model.fc = nn.Linear(num_ftrs, 19)
 
+class DenseNet(Model):
+    def __init__(self):
+        super().__init__("DenseNet")
+        self.model = tv.models.densenet121(pretrained=True)
+        self.model.classifier = nn.Linear(1024, 19)
+
+class Inception(Model):
+    def __init__(self):
+        super().__init__("inception")
+        self.model = tv.models.inception_v3(pretrained = True)
+        
+        self.model.aux_logits = False
+        num_ftrs = self.model.fc.in_features
+        #num_Auxftrs = self.model.AuxLogits.fc.in_features
+        self.model.fc = nn.Linear(num_ftrs, 19)
+        #self.model.AuxLogits.fc = nn.Linear(num_Auxftrs, 19)
 class DNN(nn.Module):
     def __init__(self):
         super().__init__()
