@@ -28,10 +28,10 @@ def read_data(data_dir):
     return datas, labels
 
 
-data = np.load('../hog.npz')
-datas = data['datas']
-labels = data['labels']
-# datas, labels = read_data('data/Classification/Data/Train')
+# data = np.load('../hog.npz')
+# datas = data['datas']
+# labels = data['labels']
+datas, labels = read_data('data/Classification/Data/Train')
 
 svr = svm.SVC()
 parameters = {'kernel': ('linear', 'rbf'), 'C': [0.1, 1, 10, 100, 1000], 'gamma': [10, 1, 0.1, 0.01, 0.001]}

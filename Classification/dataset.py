@@ -39,17 +39,23 @@ class my_dataset(torch.utils.data.Dataset):
                 self.img_class += c
         elif self.mode == "test":
             self.imgs += os.listdir(os.path.join("data/Classification/Data/Test"))
+        elif self.mode == "det-test":
+            self.imgs += os.listdir(os.path.join("data/Detection/crop"))
         
     def __getitem__(self, idx):
         if self.mode == "train":
             img_path = os.path.join("data/Classification/Data/Train/", self.imgs[idx])
         elif self.mode == "test":
             img_path = os.path.join("data/Classification/Data/Test/", self.imgs[idx])
+        elif self.mode == "det-test":
+            img_path = os.path.join("data/Detection/crop/", self.imgs[idx])
         img = Image.open(img_path).convert('RGB')
         if self.transforms is not None:
             img = self.transforms(img)
-        sample = {'image': img, 'label': labels[self.img_class[idx]]}
-
+        if self.mode == "train":
+            sample = {'image': img, 'label': labels[self.img_class[idx]]}
+        elif self.mode == "test" or self.mode == "det-test":
+            sample = {'image': img}
         return sample
     def __len__(self):
         return len(self.imgs)
