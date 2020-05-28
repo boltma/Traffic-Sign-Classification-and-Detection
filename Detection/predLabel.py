@@ -23,9 +23,9 @@ def parse_args():
 args = parse_args()
 use_gpu = args.cuda == 'True'
 YOLO = args.model == 'YOLO'
-# subprocess.call(['python', 'detect.py', '--cfg', 'cfg/yolov3.cfg',
-#                  '--names', 'data/traffic.names', '--weights', 'weights/best.pt', '--source',
-#                  '../../data/Detection/test', '--save-txt'], cwd='Detection/yolov3')
+subprocess.call(['python', 'detect.py', '--cfg', 'cfg/yolov3.cfg',
+                 '--names', 'data/traffic.names', '--weights', 'weights/best.pt', '--source',
+                 '../../data/Detection/test', '--save-txt'], cwd='Detection/yolov3')
 
 datapath = 'data/Detection/test'
 predpath = 'Detection/yolov3/output'
