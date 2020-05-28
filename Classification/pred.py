@@ -29,7 +29,7 @@ labels = [
     'po',
     'w57'
 ]
-name = open('pred.json', 'w')
+name = open('pred2.json', 'w')
 train_tfs = transforms.Compose([
     transforms.Resize(299),
     transforms.RandomSizedCrop(299),

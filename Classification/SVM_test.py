@@ -31,6 +31,6 @@ predicted = classifier.predict(datas)
 test_labels = dict(zip(names, predicted))
 test_json = json.dumps(test_labels)
 
-file = open('pred.json', 'w')
+file = open('pred1.json', 'w')
 file.write(test_json)
 file.close()
