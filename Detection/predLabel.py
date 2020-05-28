@@ -55,14 +55,7 @@ if not YOLO:
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
-    if args.model == 'ResNet18':
-        test_model.load_state_dict(torch.load('params18.pkl'))
-    if args.model == 'ResNet50':
-        test_model.load_state_dict(torch.load('params50.pkl'))
-    if args.model == 'Inception':
-        test_model.load_state_dict(torch.load('paramsdnn.pkl'))
-    if args.model == 'DenseNet':
-        test_model.load_state_dict(torch.load('paramsInception.pkl'))
+    test_model.load_state_dict(torch.load('params' + args.model + '.pkl'))
     print('Initialization finished')
 for img_name in os.listdir(datapath):
     img_id = os.path.splitext(img_name)[0]
@@ -104,6 +97,6 @@ if not YOLO:
             num = num + 1
 
 test_json = json.dumps({'imgs': annotations})
-file = open('pred_annotations8.json', 'w')
+file = open('pred_annotations.json', 'w')
 file.write(test_json)
 file.close()
