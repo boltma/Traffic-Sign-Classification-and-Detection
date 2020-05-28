@@ -6,13 +6,14 @@ import torch
 from torchvision import transforms
 from torch.autograd import Variable
 import sys
+
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../'))
 from Classification import model
 from Classification.dataset import my_dataset
 
 subprocess.call(['python', 'detect.py', '--cfg', 'cfg/yolov3.cfg',
-                '--names', 'data/traffic.names', '--weights', 'weights/best.pt', '--source',
-                '../../data/Detection/test', '--save-txt'], cwd='Detection/yolov3')
+                 '--names', 'data/traffic.names', '--weights', 'weights/best.pt', '--source',
+                 '../../data/Detection/test', '--save-txt'], cwd='Detection/yolov3')
 
 datapath = 'data/Detection/test'
 predpath = 'Detection/yolov3/output'

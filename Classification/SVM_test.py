@@ -23,7 +23,7 @@ def read_data(data_dir):
     return datas, names
 
 
-datas, names = read_data('../data/Classification/Data/Test')
+datas, names = read_data('data/Classification/Data/Test')
 print('Finish reading test images.')
 
 classifier = joblib.load('../svm.m')
