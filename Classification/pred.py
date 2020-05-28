@@ -7,7 +7,11 @@ from torchvision import transforms
 from test import test
 from torch.autograd import Variable
 import json
-
+import argparse
+def parse_args():
+    parser = argparse.ArgumentParser(description='Prediction')
+    parser.add_argument('--model', default='ResNet18', help = 'You can choose: ResNet18, ResNet50, Inception, DenseNet')
+    return parser.parse_args()
 labels = [
     'i2',
     'i4',
@@ -29,44 +33,46 @@ labels = [
     'po',
     'w57'
 ]
-name = open('pred2.json', 'w')
-train_tfs = transforms.Compose([
-    transforms.Resize(299),
-    transforms.RandomSizedCrop(299),
-    transforms.RandomHorizontalFlip(),
-    transforms.ToTensor(),
-    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-])
-ds = my_dataset("test", train_tfs)
-dataset_size = ds.__len__()
-print(dataset_size)
-loader = torch.utils.data.DataLoader(ds, 16, False)
+def main():
+    args = parse_args()
+    name = open('pred2.json', 'w')
+    train_tfs = transforms.Compose([
+        transforms.Resize(299),
+        transforms.RandomSizedCrop(299),
+        transforms.RandomHorizontalFlip(),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])
+    ds = my_dataset("test", train_tfs)
+    dataset_size = ds.__len__()
+    print(dataset_size)
+    loader = torch.utils.data.DataLoader(ds, 16, False)
 
-test_model = model.Inception()
-test_model = test_model.cuda()
-test_model.load_state_dict(torch.load('paramsInception.pkl'))
+    test_model = model.Inception()
+    test_model = test_model.cuda()
+    test_model.load_state_dict(torch.load('params' + args.model + '.pkl'))
 
-preds = {}
-num = 0
-for i, data in enumerate(loader):
+    preds = {}
+    num = 0
+    for i, data in enumerate(loader):
 
-    image = data['image']
-    print(image.size())
+        image = data['image']
+        print(image.size())
 
-    image = Variable(image.cuda())
-    # label = Variable(label.cuda())
+        image = Variable(image.cuda())
+        # label = Variable(label.cuda())
 
-    output = test_model(image)
+        output = test_model(image)
 
-    pred = torch.argmax(output, 1)
-    # if i < 10:
-    #    print(pred)
-    for j in pred:
-        if i < 10:
-            print(j)
-        preds[ds.imgs[num]] = labels[j.int()]
-        num = num + 1
-print(json.dumps(preds))
-print(num)
-name.write(json.dumps(preds))
-name.close()
+        pred = torch.argmax(output, 1)
+        # if i < 10:
+        #    print(pred)
+        for j in pred:
+            if i < 10:
+                print(j)
+            preds[ds.imgs[num]] = labels[j.int()]
+            num = num + 1
+    print(json.dumps(preds))
+    print(num)
+    name.write(json.dumps(preds))
+    name.close()
