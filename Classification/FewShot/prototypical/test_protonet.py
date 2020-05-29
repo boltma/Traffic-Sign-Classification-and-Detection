@@ -68,7 +68,7 @@ def euclidean_dist(x, y):
 def main():
     model = init_protonet()
     model.load_state_dict(
-        torch.load(EXPERIMENT_PATH + os.sep + 'last_model.pth'))
+        torch.load(EXPERIMENT_PATH + os.sep + 'best_model.pth'))
     model.eval()
     support_img, support_label = load_from_json('train')
     support_proto = []
